@@ -181,7 +181,7 @@ with gr.Blocks() as demo:
     gr.Markdown("# Playlist Visualizer")
     sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="energy")
 
-    for song in playlist.get_songs(sort_by):
+    for song in playlist.get_songs(sort_by.value):
         with gr.Row():
             gr.Markdown("## " + song.name)
             with gr.Row():
