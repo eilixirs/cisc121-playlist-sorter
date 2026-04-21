@@ -19,7 +19,7 @@ A playlist sorter that organizes songs by either energy score or duration with m
 **Merge Sort**. This algorithm was chosen because it performs well with insofar as time complexity goes, regardless of input order (always O(n log n)). Merge sort's divide-and-merge structure also cleanly performs the task of reordering playlists, lending itself well to visualizing each stage as we log discrete steps. It produces a stable sort, which means that songs with equal durations or times stay in their original relative order, which is optimal in the context of sorting songs in a playlist (where users may wish to preserve input order). 
 
 ## Demo
-*to add* 
+https://github.com/user-attachments/assets/d34e7bbb-d956-4b0f-b98b-a02a3474ae58
 
 ## Problem Breakdown & Computational Thinking
 
