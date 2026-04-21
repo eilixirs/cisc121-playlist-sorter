@@ -179,11 +179,13 @@ playlist.add_song(Song(
 
 with gr.Blocks() as demo:
     gr.Markdown("# Playlist Visualizer")
-    sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="energy")
+    sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?")
 
-    for song in playlist.get_songs(sort_by.value):
-        with gr.Row():
-            gr.Markdown("## " + song.name)
-            gr.Text(song.artist + " • " + str(song.duration) + " • " + str(song.energy))
+    @gr.render(inputs=sort_by)
+    def render_songs(sort_by: str | None):
+        for song in playlist.get_songs(sort_by.value):
+            with gr.Row():
+                gr.Markdown("## " + song.name)
+                gr.Text(song.artist + " • " + str(song.duration) + " • " + str(song.energy))
 
 demo.launch()
