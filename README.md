@@ -47,7 +47,8 @@ We take a song list containing the song name, artist name, song energy level, an
     - (6) a playlist with duplicates (two songs are the same) 
 
 ### Flowchart
-*to add*  
+<img width="2560" height="3705" alt="Flowchart - Playlist Sorter" src="https://github.com/user-attachments/assets/6bd59290-e01f-40d5-9a5e-ae59b2e24a1c" />
+
 
 ## Steps to Run (Locally) and requirements.txt
 *to add!!!* 
