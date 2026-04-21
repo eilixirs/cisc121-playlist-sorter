@@ -75,9 +75,9 @@ def merge(left: list[Song], right: list[Song], key: str):
         add the ability to sort in ascending or descending order. c:
         """
         if getattr(left_item, key) < getattr(right_item, key):
-            result.append(right.pop())
+            result.append(right.pop(0))
         else:
-            result.append(left.pop())
+            result.append(left.pop(0))
 
         """
         We're going to iterate over the remaining items in the array
@@ -179,11 +179,11 @@ playlist.add_song(Song(
 
 with gr.Blocks() as demo:
     gr.Markdown("# Playlist Visualizer")
-    sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?")
+    sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="duration")
 
     @gr.render(inputs=sort_by)
     def render_songs(sort_by: str | None):
-        for song in playlist.get_songs(sort_by.value):
+        for song in playlist.get_songs(sort_by):
             with gr.Row():
                 gr.Markdown("## " + song.name)
                 gr.Text(song.artist + " • " + str(song.duration) + " • " + str(song.energy))
