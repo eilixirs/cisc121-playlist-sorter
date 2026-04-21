@@ -46,12 +46,12 @@ We take a song list containing the song name, artist name, song energy level, an
 
 ## Testing
 With edge cases derived from the above, within algorithmic thinking: 
-    - Case(1): a song with a very long duration | Expected Output = | Result = Passed
-    - Case(2): a song where the duration is a negative number | Expected Output = | Result = Passed
-    - Case(3): a song where the energy level is a negative number | Expected Output = | Result = Passed
-    - Case(4): a song where the energy level is over 100 | Expected Output = | Result = Passed
-    - Case(5): an empty playlist (no songs) | Expected Output = | Result = Passed
-    - Case(6): a playlist with duplicates (two songs are the same) | Expected Output = | Result = Passed
+- Case(1): a song with a very long duration | Expected Output = | Result = Passed
+- Case(2): a song where the duration is a negative number | Expected Output = | Result = Passed
+- Case(3): a song where the energy level is a negative number | Expected Output = | Result = Passed
+- Case(4): a song where the energy level is over 100 | Expected Output = | Result = Passed
+- Case(5): an empty playlist (no songs) | Expected Output = | Result = Passed
+- Case(6): a playlist with duplicates (two songs are the same) | Expected Output = | Result = Passed
 
 ## Author & AI Acknowledgment
 
