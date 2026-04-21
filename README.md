@@ -44,7 +44,8 @@ We take a song list containing the song name, artist name, song energy level, an
     - (3) a song where the energy level is a negative number
     - (4) a song where the energy level is over 100
     - (5) an empty playlist (no songs)
-    - (6) a playlist with duplicates (two songs are the same) 
+    - (6) a playlist with duplicates (two songs are the same)
+  - **Process***: Provided in Decomposition, above.
 
 ### Flowchart
 <img width="4698" height="2638" alt="Flowchart - Playlist Sorter" src="https://github.com/user-attachments/assets/3d136d32-4ed9-431b-a0e8-9e37f4fed040" />
@@ -55,7 +56,7 @@ We take a song list containing the song name, artist name, song energy level, an
 
 
 ## Hugging Face Link
-*to add*
+(https://huggingface.co/spaces/eilixirs/playlist-demo)
 
 ## Testing
 With edge cases derived from the above, within algorithmic thinking: 
