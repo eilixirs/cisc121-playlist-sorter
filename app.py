@@ -184,10 +184,10 @@ with gr.Blocks() as demo:
     @gr.render(inputs=sort_by)
     def render_songs(sort_by: str | None):
         for song in playlist.get_songs(sort_by):
-            with gr.Row():
+            with gr.Column():
                 gr.Markdown(f"## {song.name}")
                 gr.Markdown(f"by {song.artist}")
-                gr.Markdown(f"{str(song.duration // 60)}s")
+                gr.Markdown(f"{str(song.duration // 6 / 10)} minutes")
                 gr.Markdown(f"{str(song.energy)} energy points")
 
 demo.launch()
