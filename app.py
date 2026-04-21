@@ -7,8 +7,12 @@ import gradio as gr
 # ============================================================
 
 class Log:
-    step: int = 0
-    steps: list[str] = []
+    step: int
+    steps: list[str]
+
+    def __init__(self):
+        self.step = 0
+        self.steps = []
 
     def add_step(self, text: str):
         self.step += 1
@@ -89,15 +93,15 @@ def merge(left: list[Song], right: list[Song], key: str, log: Log):
         add the ability to sort in ascending or descending order. c:
         """
         left_item_attr = getattr(left_item, key)
-        right_item_attr = getattr(right, key)
+        right_item_attr = getattr(right_item, key)
         
         if left_item_attr < right_item_attr:
             log.add_step(f"left_item's '{key}' attribute ({left_item_attr}) is less than right_item's '{key}' attribute ({right_item_attr}), removing right_item from right array and adding to result")
-            result.append(right.pop(0))
+            result.append(left.pop(0))
             log.add_step(f"result has {len(result)} items")
         else:
             log.add_step(f"left_item's '{key}' attribute ({left_item_attr}) is greater than or equal to right_item's '{key}' attribute ({right_item_attr}), removing left_item from left array and adding to result")
-            result.append(left.pop(0))
+            result.append(right.pop(0))
 
         """
         We're going to iterate over the remaining items in the array
@@ -176,8 +180,8 @@ def sort(array: list[Song], key: str, log: Log):
     and the playlist is sorted.
     """
     return merge(
-        left=sort(left, key),
-        right=sort(right, key),
+        left=sort(left, key, log),
+        right=sort(right, key, log),
         key=key,
         log=log
     )
@@ -225,7 +229,7 @@ with gr.Blocks() as demo:
                 gr.Markdown(f"## {song.name}")
                 with gr.Row():
                     gr.Markdown(f"by {song.artist}")
-                    gr.Markdown(f"{str(song.duration // 6 / 10)} minutes")
+                    gr.Markdown(f"{str(round(song.duration / 60, 1))} minutes")
                     gr.Markdown(f"{str(song.energy)} energy points")
 
         gr.Markdown(f"## Detailed Breakdown")
