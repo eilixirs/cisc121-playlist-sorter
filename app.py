@@ -184,9 +184,6 @@ with gr.Blocks() as demo:
     for song in playlist.get_songs(sort_by.value):
         with gr.Row():
             gr.Markdown("## " + song.name)
-            with gr.Row():
-                gr.Text(song.artist + " • " + song.duration)
-                gr.Text("Energy: " + song.energy)
-                gr.Text("Duration: " + song.duration + "s")
+            gr.Text(song.artist + " • " + str(song.duration) + " • " + str(song.energy))
 
 demo.launch()
