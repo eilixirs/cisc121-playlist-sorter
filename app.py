@@ -23,8 +23,8 @@ class Log:
     def add_step(self, text: str):
         self.step += 1
         self.steps.append(f"Step {self.step}: {text}")
-
     def get_steps(self):
+
         return self.steps
 
 class Song:
@@ -60,7 +60,7 @@ class Song:
 
 class Playlist:
     songs: list[Song]
-
+    
     def __init__(self):
         self.songs = []
     
@@ -87,9 +87,9 @@ class Playlist:
 
 def merge(left: list[Song], right: list[Song], key: str, log: Log):
     result: list[Song] = []
-
+    
     log.add_step(f"merge() called with {str(len(left))} items in 'left' and {str(len(right))} items in 'right'")
-
+    
     """
     Until one of the arrays are empty, we will continue to compare
     the first items of each array which allows us to push the smallest
@@ -98,7 +98,7 @@ def merge(left: list[Song], right: list[Song], key: str, log: Log):
     while len(left) > 0 and len(right) > 0:
         left_item = left[0]
         right_item = right[0]
-
+        
         """
         If our left and right arrays are not even (i.e., left = [1], right = [2, 3])
         then we want to escape the while-loop. We'll need to clean this up later so
@@ -107,7 +107,7 @@ def merge(left: list[Song], right: list[Song], key: str, log: Log):
         if left_item is None or right_item is None:
             log.add_step("left_item or right_item was None, exiting while-loop")
             continue
-
+        
         """
         Here, we're just accessing the attribute we want to organize
         the array by, in this case either 'energy' or 'duration'
@@ -125,8 +125,8 @@ def merge(left: list[Song], right: list[Song], key: str, log: Log):
         else:
             log.add_step(f"left_item's '{key}' attribute ({left_item_attr}) is greater than or equal to right_item's '{key}' attribute ({right_item_attr}), removing left_item from left array and adding to result")
             result.append(right.pop(0))
-
         """
+
         We're going to iterate over the remaining items in the array
         to ensure that any leftovers (which occurs if either left or right
         are depleted are then pushed to the end of the results array
@@ -137,7 +137,7 @@ def merge(left: list[Song], right: list[Song], key: str, log: Log):
     for item in left:
         log.add_step(f"appending leftover item from left to result")
         result.append(item)
-
+        
     log.add_step(f"{len(right)} leftovers in right")
 
     for item in right:
@@ -145,7 +145,7 @@ def merge(left: list[Song], right: list[Song], key: str, log: Log):
         result.append(item)
 
     return result
-
+    
 def split(array: list[Song], log: Log):
     left: list[Song] = []
     right: list[Song] = []
@@ -182,7 +182,6 @@ def split(array: list[Song], log: Log):
 
     return left, right
     
-
 def sort(array: list[Song], key: str, log: Log):
     """
     This is our base case, when this condition
@@ -192,7 +191,7 @@ def sort(array: list[Song], key: str, log: Log):
         return array
     
     left, right = split(array, log)
-
+    
     """
     This is where the magic happens! We recursively call
     "sort" on both halves of the array, which will result
@@ -208,67 +207,69 @@ def sort(array: list[Song], key: str, log: Log):
         key=key,
         log=log
     )
-
-
 """
-Some sample songs from my playlist here, I would recommend checking them out.
+Each test case is a factory keyed by a string identifier that returns a list[Song].
+Selecting a different key just swaps the input array — the rest of the UI is unchanged.
+Factories that create invalid songs will raise a ValueError, which the render function
+catches and displays as an error boundary.
 """
-playlist = Playlist()
-
-playlist.add_song(Song(
-    name="Chainsmoking",
-    artist="Jacob Banks",
-    duration=202,
-    energy=58
-))
-
-playlist.add_song(Song(
-    name="Toes", 
-    artist="Glass Animals", 
-    duration=255, 
-    energy=35
-))
-
-playlist.add_song(Song(
-    name="Vois sur ton chemin - Techno Mix",
-    artist="BENNETT", 
-    duration=178, 
-    energy=100
-))
-
-playlist.add_song(Song(
-    name="Yes I'm Changing",
-    artist="Tame Impala", 
-    duration=271, 
-    energy=46
-))
-
-playlist.add_song(Song(
-    name="Innerbloom",
-    artist="Rüfüs Du Sol", 
-    duration=578, 
-    energy=52
-))
-
+test_cases: dict[str, callable] = {
+    "default": lambda: [
+        Song(name="Chainsmoking", artist="Jacob Banks", duration=202, energy=58),
+        Song(name="Toes", artist="Glass Animals", duration=255, energy=35),
+        Song(name="Vois sur ton chemin - Techno Mix", artist="BENNETT", duration=178, energy=100),
+        Song(name="Yes I'm Changing", artist="Tame Impala", duration=271, energy=46),
+        Song(name="Innerbloom", artist="Rüfüs Du Sol", duration=578, energy=52),
+    ],
+    "long_duration": lambda: [
+        Song(name="The Longest Song Ever", artist="Test Artist", energy=50, duration=10000),
+    ],
+    "negative_duration": lambda: [
+        Song(name="Backwards Song", artist="Test Artist", energy=50, duration=-1),
+    ],
+    "negative_energy": lambda: [
+        Song(name="Low Energy Song", artist="Test Artist", energy=-10, duration=200),
+    ],
+    "energy_over_100": lambda: [
+        Song(name="Hyper Song", artist="Test Artist", energy=101, duration=200),
+    ],
+    "empty": lambda: [],
+    "duplicates": lambda: [
+        Song(name="Echo", artist="Test Artist", energy=70, duration=200),
+        Song(name="Echo", artist="Test Artist", energy=70, duration=200),
+        Song(name="Quiet Intro", artist="Test Artist", energy=30, duration=150),
+    ],
+}
 """
 Here, gradio comes into play to render the UI.
 """
 with gr.Blocks() as demo:
     gr.Markdown("# Playlist Visualizer")
-    sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="duration")
-
+    with gr.Row():
+        test_case = gr.Radio(list(test_cases.keys()), label="Test case", value="default")
+        sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="duration")
     gr.Markdown("## View Songs")
-
-    @gr.render(inputs=sort_by)
-    def render_songs(sort_by: str | None):
+    @gr.render(inputs=[test_case, sort_by])
+    def render_songs(test_case: str, sort_by: str | None):
         log = Log()
-        
+
         """
-        Here, we iterate over each song from the Playlist.get_songs function,
-        we pass in the sort key and the logger to ensure that the log is accessible
-        internally
+        We call the selected test case factory to get the input array.
+        If it raises a ValueError (e.g. a song with an invalid energy or duration),
+        we surface the message as an error boundary and stop rendering.
         """
-        for song in playlist.get_songs(sort_by, log):
+        try:
+            songs = test_cases[test_case]()
+        except ValueError as e:
+            gr.Markdown(f"ValueError: `{e}`")
+            return
+
+        """
+        Here, we iterate over each song — passing the songs directly into sort()
+        rather than through a Playlist instance, since the test case factory already
+        gives us the array we want.
+        """
+        for song in (sort(songs, sort_by, log) if sort_by else songs):
             with gr.Column():
                 gr.Markdown(f"## {song.name}")
                 with gr.Row():
@@ -280,10 +281,10 @@ with gr.Blocks() as demo:
                     gr.Markdown(f"by {song.artist}")
                     gr.Markdown(f"{str(round(song.duration / 60, 1))} minutes")
                     gr.Markdown(f"{str(song.energy)} energy points")
-
+                    
         gr.Markdown(f"## Detailed Breakdown")
         gr.Markdown("This is a breakdown of the steps that were involved in sorting the array.")
-
+        
         """
         Speaking of internally accessible logs, here we iterate over each
         step that comes from Log.get_steps, which we then render in codeblocks
@@ -293,5 +294,4 @@ with gr.Blocks() as demo:
             with gr.Column():
                 gr.Markdown(f"```{item}```")
             
-
 demo.launch()
