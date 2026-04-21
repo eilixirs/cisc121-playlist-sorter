@@ -59,22 +59,34 @@ We take a song list containing the song name, artist name, song energy level, an
 
 ## Testing
 With edge cases derived from the above, within algorithmic thinking: 
-- Case(1): a song with a very long duration | Expected Output = | Result = Passed
-- Case(2): a song where the duration is a negative number | Expected Output = | Result = Passed
-- Case(3): a song where the energy level is a negative number | Expected Output = | Result = Passed
-- Case(4): a song where the energy level is over 100 | Expected Output = | Result = Passed
-- Case(5): an empty playlist (no songs) | Expected Output = | Result = Passed
-- Case(6): a playlist with duplicates (two songs are the same) | Expected Output = | Result = Passed
+- Case(1): a song with a very long duration
+  - Expected Output = Song gets sorted as usual, app/code can handle larger numbers
+  - Result = Passed
+- Case(2): a song where the duration is a negative number
+  - Expected Output = ValueError thrown, message displays that duration is not valid
+  - Result = Passed
+- Case(3): a song where the energy level is a negative number
+  - Expected Output = ValueError thrown, message displays that the energy level is not valid, too low
+  - Result = Passed
+- Case(4): a song where the energy level is over 100
+  - Expected Output = ValueError thrown, message displays that the energy level is not valid, too high
+  - Result = Passed
+- Case(5): an empty playlist (no songs)
+  - Expected Output = no songs or breakdown displayed, app does not run without end
+  - Result = Passed
+- Case(6): a playlist with duplicates (two songs have the same values on duration or energy level)
+  - Expected Output = stable sort, order of duplicates remains the same as the entry
+  - Result = Passed
 
 ## Author & AI Acknowledgment
 
 **Author:** Iris Xie
-**Course:** CISC-121, Queen's University
+**Course:** CISC121 001 Intro. to Computing Science I W26
 **Instructor:** Dr. Ruslan Kain
 
 **AI Use:** Used various AI tools at varied levels:
-- Claude Code: used to debug code and outline where to place log.add_steps. 
+- Claude: Primarily used to debug code. Also used to outline where to place log.add_steps. Used additionally to create test case inputs and identifiers within gradio to verify test cases passed. All concepts understood by, and all code written by the author. 
 - Google Gemini: used to explain concepts, confirm python syntax, and expand function repitoire.
 
-**Sources:**
-*to add!! some links* 
+**Additional Notes:**
+Requirements under this problem idea of "animate comparisons/moves so the re-ordering is easy to follow" are completed through the "Detailed Breakdown" portion of the app, following the example provided by Dr. Rahatara Ferdousi, where "Search Steps" were used to visualize the process. 
