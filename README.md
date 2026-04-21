@@ -33,11 +33,12 @@ We take a song list containing the song name, artist name, song energy level, an
 - **Algorithmic Thinking:** 
   - **Input:** Any playlist of songs containing four details (song name, artist, energy level, duration) and a sorting key (energy level or duration) selected by the user via Gradio.
   - **Output:** Gradio displays the step log (each merge numbered and explained) and the final sorted playlist in a listed order, with details alongside each song.
-  - **Constraints:**
+  - **Constraints and Assumptions:**
     - Energy scores must be integers in the range 0-100.
     - Duration is provided in whole seconds.
     - Song titles and artist names are strings and not used as sort keys.
     - Sort keys are exclusively duration or energy level, not both.
+    - Song inputs must be in order of song name, artist, energy level, and duration, separated by commas. 
   - **Edge Cases:** 
     - (1) List with a song with a very long duration
     - (2) List with a song where the duration is a negative number
@@ -61,7 +62,7 @@ We take a song list containing the song name, artist name, song energy level, an
 ## Testing
 With edge cases derived from the above, within algorithmic thinking: 
 - Case(1): List with a song with a very long duration
-  - Expected Output = Song gets sorted as usual, app/code can handle larger numbers
+  - Expected Output = Song gets sorted as usual, large numbers handled 
   - Result = Passed
 - Case(2): List with a song where the duration is a negative number
   - Expected Output = ValueError thrown, message displays that duration is not valid
