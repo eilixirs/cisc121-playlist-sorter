@@ -6,6 +6,17 @@ import gradio as gr
 # Algorithm: Merge Sort
 # ============================================================
 
+class Log:
+    step: int = 0
+    steps: list[str] = []
+
+    def add_step(self, text: str):
+        self.step += 1
+        self.steps.append(f"Step {self.step}: {text}")
+
+    def get_steps(self):
+        return self.steps
+
 class Song:
     """
     By using a class here, we can validate the values of each "instance" of a Song!
@@ -41,14 +52,16 @@ class Playlist:
     def add_song(self, song: Song):
         self.songs.append(song)
 
-    def get_songs(self, sort_by: str | None):
+    def get_songs(self, sort_by: str | None, log: Log = Log()):
         if sort_by is None:
             return self.songs
 
-        return sort(self.songs, sort_by)
+        return sort(self.songs, sort_by, log)
 
-def merge(left: list[Song], right: list[Song], key: str):
+def merge(left: list[Song], right: list[Song], key: str, log: Log):
     result: list[Song] = []
+
+    log.add_step(f"merge() called with {str(len(left))} items in 'left' and {str(len(right))} items in 'right'")
 
     """
     Until one of the arrays are empty, we will continue to compare
@@ -65,6 +78,7 @@ def merge(left: list[Song], right: list[Song], key: str):
         that we don't lose items.
         """
         if left_item is None or right_item is None:
+            log.add_step("left_item or right_item was None, exiting while-loop")
             continue
 
         """
@@ -74,9 +88,15 @@ def merge(left: list[Song], right: list[Song], key: str):
         We would flip the comparison operator here later if we wanted to
         add the ability to sort in ascending or descending order. c:
         """
-        if getattr(left_item, key) < getattr(right_item, key):
+        left_item_attr = getattr(left_item, key)
+        right_item_attr = getattr(right, key)
+        
+        if left_item_attr < right_item_attr:
+            log.add_step(f"left_item's '{key}' attribute ({left_item_attr}) is less than right_item's '{key}' attribute ({right_item_attr}), removing right_item from right array and adding to result")
             result.append(right.pop(0))
+            log.add_step(f"result has {len(result)} items")
         else:
+            log.add_step(f"left_item's '{key}' attribute ({left_item_attr}) is greater than or equal to right_item's '{key}' attribute ({right_item_attr}), removing left_item from left array and adding to result")
             result.append(left.pop(0))
 
         """
@@ -85,15 +105,21 @@ def merge(left: list[Song], right: list[Song], key: str):
         are depleted are then pushed to the end of the results array
         """
 
+    log.add_step(f"{len(left)} leftovers in left")
+
     for item in left:
+        log.add_step(f"appending leftover item from left to result")
         result.append(item)
 
+    log.add_step(f"{len(right)} leftovers in right")
+
     for item in right:
+        log.add_step(f"appending leftover item from right to result")
         result.append(item)
 
     return result
 
-def split(array: list[Song]):
+def split(array: list[Song], log: Log):
     left: list[Song] = []
     right: list[Song] = []
 
@@ -106,6 +132,8 @@ def split(array: list[Song]):
     item_count = len(array)
     midpoint = item_count // 2
 
+    log.add_step(f"{item_count} items in array, midpoint is {midpoint}")
+
     """
     Now we're going to iterate over each item, and if the
     index of the item is less than the midpoint we push it
@@ -117,14 +145,18 @@ def split(array: list[Song]):
         item = array[i]
 
         if i < midpoint:
+            log.add_step(f"item at position {i} is less than the midpoint ({midpoint}), appending to left")
             left.append(item)
         else:
+            log.add_step(f"item at position {i} is greater than or equal to the midpoint ({midpoint}), appending to right")
             right.append(item)
+
+    log.add_step(f"left has {len(left)} items, right has {len(right)} items")
 
     return left, right
     
 
-def sort(array: list[Song], key: str):
+def sort(array: list[Song], key: str, log: Log):
     """
     This is our base case, when this condition
     is hit, our recursion stops.
@@ -132,7 +164,7 @@ def sort(array: list[Song], key: str):
     if len(array) <= 1:
         return array
     
-    left, right = split(array)
+    left, right = split(array, log)
 
     """
     This is where the magic happens! We recursively call
@@ -144,9 +176,10 @@ def sort(array: list[Song], key: str):
     and the playlist is sorted.
     """
     return merge(
-        sort(left, key),
-        sort(right, key),
-        key
+        left=sort(left, key),
+        right=sort(right, key),
+        key=key,
+        log=log
     )
 
 
@@ -181,14 +214,26 @@ with gr.Blocks() as demo:
     gr.Markdown("# Playlist Visualizer")
     sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="duration")
 
+    gr.Markdown("## View Songs")
+
     @gr.render(inputs=sort_by)
     def render_songs(sort_by: str | None):
-        for song in playlist.get_songs(sort_by):
+        log = Log()
+        
+        for song in playlist.get_songs(sort_by, log):
             with gr.Column():
                 gr.Markdown(f"## {song.name}")
                 with gr.Row():
                     gr.Markdown(f"by {song.artist}")
                     gr.Markdown(f"{str(song.duration // 6 / 10)} minutes")
                     gr.Markdown(f"{str(song.energy)} energy points")
+
+        gr.Markdown(f"## Detailed Breakdown")
+        gr.Markdown("This is a breakdown of the steps that were involved in sorting the array.")
+
+        for item in log.get_steps():
+            with gr.Column():
+                gr.Markdown(f"```{item}```")
+            
 
 demo.launch()
