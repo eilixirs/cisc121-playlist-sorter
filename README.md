@@ -49,12 +49,10 @@ We take a song list containing the song name, artist name, song energy level, an
   - **Process***: Provided in Decomposition, above.
 
 ### Flowchart
-<img width="4698" height="2638" alt="Flowchart - Playlist Sorter" src="https://github.com/user-attachments/assets/3d136d32-4ed9-431b-a0e8-9e37f4fed040" />
-
+<img width="4698" height="2638" alt="Flowchart - Playlist Sorter" src="https://github.com/user-attachments/assets/3544a3fd-41fd-475b-8bdd-91f9e7ef5d7e" />
 
 ## Steps to Run (Locally) and requirements.txt
 *to add!!!* 
-
 
 ## Hugging Face Link
 (https://huggingface.co/spaces/eilixirs/playlist-demo)
