@@ -10,6 +10,12 @@ class Log:
     step: int
     steps: list[str]
 
+    """
+    Creating logged steps to visualize in the final app all the steps that 
+    are taking place to sort each song in the playlist. Log.add_step occurs throughout
+    the code to indicate which steps require notation in the app. 
+    """
+
     def __init__(self):
         self.step = 0
         self.steps = []
@@ -33,6 +39,11 @@ class Song:
             duration: int
         ):
 
+        """
+        Here, we assert error messages for raised value errors such as if the energy level
+        is not in between 0 and 100, or if the duration of the song is invalid, as in less
+        than 0 to validate the inputs. 
+        """
         if energy > 100:
             raise ValueError(f"Energy level '{energy}' is too high, it must be between 0 and 100")
         
@@ -48,18 +59,30 @@ class Song:
         self.duration = duration
 
 class Playlist:
-    songs: list[Song] = []
+    songs: list[Song]
 
     def __init__(self):
         self.songs = []
     
+    """
+    Adds a song to this "instance's" songs array
+    """
     def add_song(self, song: Song):
         self.songs.append(song)
 
     def get_songs(self, sort_by: str | None, log: Log = Log()):
+        """
+        If we don't pass in a sort key, we return the songs in the
+        same order that `add_song` was called for this playlist instance
+        """
         if sort_by is None:
             return self.songs
 
+        """
+        Otherwise, this is where we call sort and pass in the
+        sort_by, which triggers the recursive sorting. We pass
+        in log to ensure that log items are all added to the list.
+        """
         return sort(self.songs, sort_by, log)
 
 def merge(left: list[Song], right: list[Song], key: str, log: Log):
@@ -188,8 +211,7 @@ def sort(array: list[Song], key: str, log: Log):
 
 
 """
-Some sample songs from my playlist will be added
-to this, would recommend checking them out.
+Some sample songs from my playlist here, I would recommend checking them out.
 """
 playlist = Playlist()
 
@@ -228,6 +250,9 @@ playlist.add_song(Song(
     energy=52
 ))
 
+"""
+Here, gradio comes into play to render the UI.
+"""
 with gr.Blocks() as demo:
     gr.Markdown("# Playlist Visualizer")
     sort_by = gr.Radio(["energy", "duration"], label="How would you like to sort your songs?", value="duration")
@@ -238,10 +263,20 @@ with gr.Blocks() as demo:
     def render_songs(sort_by: str | None):
         log = Log()
         
+        """
+        Here, we iterate over each song from the Playlist.get_songs function,
+        we pass in the sort key and the logger to ensure that the log is accessible
+        internally
+        """
         for song in playlist.get_songs(sort_by, log):
             with gr.Column():
                 gr.Markdown(f"## {song.name}")
                 with gr.Row():
+                    """
+                    Here, we display song details in our preferred format
+                    - we just format each one in a way that makes sense for the data
+                    point.
+                    """
                     gr.Markdown(f"by {song.artist}")
                     gr.Markdown(f"{str(round(song.duration / 60, 1))} minutes")
                     gr.Markdown(f"{str(song.energy)} energy points")
@@ -249,6 +284,11 @@ with gr.Blocks() as demo:
         gr.Markdown(f"## Detailed Breakdown")
         gr.Markdown("This is a breakdown of the steps that were involved in sorting the array.")
 
+        """
+        Speaking of internally accessible logs, here we iterate over each
+        step that comes from Log.get_steps, which we then render in codeblocks
+        in markdown
+        """
         for item in log.get_steps():
             with gr.Column():
                 gr.Markdown(f"```{item}```")
