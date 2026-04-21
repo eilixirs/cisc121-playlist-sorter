@@ -197,14 +197,14 @@ playlist.add_song(Song(
     name="Chainsmoking",
     artist="Jacob Banks",
     duration=202,
-    energy=42
+    energy=58
 ))
 
 playlist.add_song(Song(
     name="Toes", 
     artist="Glass Animals", 
     duration=255, 
-    energy=30
+    energy=35
 ))
 
 playlist.add_song(Song(
@@ -212,6 +212,20 @@ playlist.add_song(Song(
     artist="BENNETT", 
     duration=178, 
     energy=100
+))
+
+playlist.add_song(Song(
+    name="Yes I'm Changing",
+    artist="Tame Impala", 
+    duration=271, 
+    energy=46
+))
+
+playlist.add_song(Song(
+    name="Innerbloom",
+    artist="Rüfüs Du Sol", 
+    duration=578, 
+    energy=52
 ))
 
 with gr.Blocks() as demo:
