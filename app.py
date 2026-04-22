@@ -291,7 +291,7 @@ with gr.Blocks() as demo:
         except ValueError as e:
             return playlist, str(e)
 
-    add_button.click(fn=on_add_click, inputs=[text_area, playlist_state, error_state], outputs=[playlist_state, error_state])
+    add_button.click(fn=on_add_click, inputs=[text_area, playlist_state], outputs=[playlist_state, error_state])
 
     @gr.render(inputs=[sort_by, playlist_state, error_state])
     def render_songs(sort_by: str | None, playlist: Playlist | None, error: str | None):
