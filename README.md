@@ -51,8 +51,25 @@ We take a song list containing the song name, artist name, song energy level, an
 ### Flowchart
 <img width="4698" height="2638" alt="Flowchart - Playlist Sorter" src="https://github.com/user-attachments/assets/3544a3fd-41fd-475b-8bdd-91f9e7ef5d7e" />
 
-## Steps to Run (Locally) and requirements.txt
-*to add!!!* 
+## Steps to Run (Locally)
+
+Clone the repository and navigate to the project, then install the project dependencies
+
+```bash
+git clone git@github.com:eilixirs/cisc121-playlist-sorter.git
+cd cisc121-playlist-sorter
+pip3 install -r requirements.txt
+```
+
+After that, you can run the app
+
+```bash
+python3 app.py
+```
+
+Then, open the link Gradio prints in the terminal - usually http://127.0.0.1:7860 in the browser.
+
+Requirements are per the requirements.txt, Python 3.10 or newer, and Gradio. 
 
 ## Hugging Face Link
 (https://huggingface.co/spaces/eilixirs/playlist-demo)
